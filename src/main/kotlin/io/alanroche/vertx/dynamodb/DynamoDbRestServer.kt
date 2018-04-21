@@ -13,7 +13,7 @@ import java.util.*
 
 class DynamoDbRestServer : CoroutineVerticle {
     init {
-        println("Init ${javaClass.simpleName}")
+        println("Init ${javaClass.simpleName}") // TODO change to log4j2
     }
 
     constructor() : super()
@@ -30,10 +30,9 @@ class DynamoDbRestServer : CoroutineVerticle {
         }
     }
 
-    // Send info about a movie
     suspend fun getItem(ctx: RoutingContext) {
         val id = UUID.randomUUID().toString()
-        println("id: $id")
+        println("id: $id") // TODO change to log4j2
         ctx.response().end(json {
             obj("id" to id).encode()
         })
