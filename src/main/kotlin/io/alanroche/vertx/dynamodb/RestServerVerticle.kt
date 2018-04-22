@@ -19,7 +19,6 @@ import software.amazon.awssdk.services.dynamodb.DynamoDBAsyncClient
  * Non blocking Rest Server, delegates to data repository verticle
  */
 class RestServerVerticle : CoroutineVerticle {
-    val eventBus = vertx.eventBus()
 
     init {
         println("Init ${javaClass.simpleName}") // TODO change to log4j2

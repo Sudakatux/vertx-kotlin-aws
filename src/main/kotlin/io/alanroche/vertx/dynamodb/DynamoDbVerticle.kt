@@ -7,9 +7,10 @@ class DynamoDbVerticle : CoroutineVerticle {
 
     override suspend fun start() {
         super.start()
-
-        // TODO implement
+        vertx.eventBus()
+                .localConsumer<String>(Endpoint.DATASTORE_ITEM_GET.name)
+                .handler {
+                    it.reply("bar") // TODO
+                }
     }
-
-
 }

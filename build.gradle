@@ -2,6 +2,8 @@ buildscript {
     ext.kotlin_version = '1.2.10'
     ext.vertx_version = '3.5.1'
     ext.aws_sdk_version = '2.0.0-preview-9'
+    ext.spek_version = '1.1.5'
+
     repositories {
         mavenCentral()
     }
@@ -20,12 +22,14 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.vertx:vertx-web:$vertx_version"
-    compile "io.vertx:vertx-lang-kotlin:$vertx_version"
-    compile "io.vertx:vertx-lang-kotlin-coroutines:$vertx_version"
-    compile "software.amazon.awssdk:dax:$aws_sdk_version"
-    compile "software.amazon.awssdk:dynamodb:$aws_sdk_version"
+    compile group:"org.jetbrains.kotlin", name: "kotlin-stdlib-jdk8", version: "$kotlin_version"
+    compile group:"io.vertx", name: "vertx-web", version: "$vertx_version"
+    compile group:"io.vertx", name: "vertx-lang-kotlin", version: "$vertx_version"
+    compile group:"io.vertx", name: "vertx-lang-kotlin-coroutines", version: "$vertx_version"
+    compile group:"software.amazon.awssdk", name: "dax", version: "$aws_sdk_version"
+    compile group:"software.amazon.awssdk", name: "dynamodb", version: "$aws_sdk_version"
+
+    testCompile group: 'org.jetbrains.spek', name: 'spek-api', version: "$spek_version"
 }
 
 compileKotlin {
