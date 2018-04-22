@@ -1,20 +1,31 @@
 package io.alanroche.vertx.dynamodb
 
+import io.vertx.core.eventbus.Message
+import io.vertx.core.eventbus.ReplyException
 import io.vertx.core.http.HttpServer
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
+import io.vertx.kotlin.core.json.obj
+import io.vertx.kotlin.core.streams.end
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.awaitResult
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.experimental.launch
-import io.vertx.kotlin.core.json.*
-import java.util.*
+import software.amazon.awssdk.services.dynamodb.DynamoDBAsyncClient
 
-class DynamoDbRestServer : CoroutineVerticle {
+
+/**
+ * Non blocking Rest Server, delegates to data repository verticle
+ */
+class RestServerVerticle : CoroutineVerticle {
+    val eventBus = vertx.eventBus()
+
     init {
         println("Init ${javaClass.simpleName}") // TODO change to log4j2
     }
+
+    val client = DynamoDBAsyncClient.builder()
 
     constructor() : super()
 
@@ -31,11 +42,20 @@ class DynamoDbRestServer : CoroutineVerticle {
     }
 
     suspend fun getItem(ctx: RoutingContext) {
-        val id = UUID.randomUUID().toString()
-        println("id: $id") // TODO change to log4j2
-        ctx.response().end(json {
-            obj("id" to id).encode()
-        })
+        val id = ctx.request().getParam("id")
+
+        // Send a message and wait for a reply
+        try {
+            val reply: Message<String> = awaitResult {
+                vertx.eventBus().send("datastore.item.get", id, it)
+            }
+            ctx.response().end {
+                obj("id" to reply.body()).encode()
+            }
+        } catch(e: ReplyException) {
+            // Handle specific reply exception here
+            println("Reply failure: ${e.message}")
+        }
     }
 
     /**

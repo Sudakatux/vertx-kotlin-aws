@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.2.10'
     ext.vertx_version = '3.5.1'
-    ext.aws_dax_version = '2.0.0-preview-9'
+    ext.aws_sdk_version = '2.0.0-preview-9'
     repositories {
         mavenCentral()
     }
@@ -24,7 +24,8 @@ dependencies {
     compile "io.vertx:vertx-web:$vertx_version"
     compile "io.vertx:vertx-lang-kotlin:$vertx_version"
     compile "io.vertx:vertx-lang-kotlin-coroutines:$vertx_version"
-    compile "software.amazon.awssdk:dax:$aws_dax_version"
+    compile "software.amazon.awssdk:dax:$aws_sdk_version"
+    compile "software.amazon.awssdk:dynamodb:$aws_sdk_version"
 }
 
 compileKotlin {
