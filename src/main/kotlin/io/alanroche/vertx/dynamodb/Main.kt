@@ -2,9 +2,8 @@ package io.alanroche.vertx.dynamodb
 
 import io.vertx.core.Vertx.vertx
 
-
 /**
- * Main dtiver app, starts Verticles
+ * Main driver app, starts Verticles
  */
 object Main {
     @JvmStatic
