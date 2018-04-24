@@ -1,6 +1,8 @@
 package io.alanroche.vertx.dynamodb
 
 
+import com.amazonaws.client.builder.AwsClientBuilder
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner
 import io.kotlintest.shouldBe
 import io.vertx.core.Vertx
@@ -41,12 +43,12 @@ class DynamoDbVerticleTest {
 
     @Test
     fun test(testContext: TestContext) {
-//        val dynamodb = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
-//                // we can use any region here
-//                AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "ddblocal"))
-//                .build()
-//        val result = dynamodb.listTables()
-//        result.tableNames.forEach { println("Table: $it") }
+        val dynamodb = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
+                // we can use any region here
+                AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "ddblocal"))
+                .build()
+        val result = dynamodb.listTables()
+        result.tableNames.forEach { println("Table: $it") }
         val async = testContext.async()
         try {
             launch(vertx.dispatcher()) {

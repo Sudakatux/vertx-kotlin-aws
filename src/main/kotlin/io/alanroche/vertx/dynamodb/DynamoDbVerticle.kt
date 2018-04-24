@@ -1,10 +1,13 @@
 package io.alanroche.vertx.dynamodb
 
 import io.vertx.kotlin.coroutines.CoroutineVerticle
+import software.amazon.awssdk.core.auth.DefaultCredentialsProvider
+import software.amazon.awssdk.core.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDBAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse
+import java.net.URL
 import java.util.function.BiFunction
 
 
@@ -18,7 +21,10 @@ class DynamoDbVerticle : CoroutineVerticle {
         vertx.eventBus()
                 .localConsumer<String>(Endpoint.DATASTORE_ITEM_GET.name) { message ->
                     try {
-                        val client = DynamoDBAsyncClient.create()
+                        val client = DynamoDBAsyncClient.builder().endpointOverride(URL("http://localhost:8000").toURI())
+                                .credentialsProvider(DefaultCredentialsProvider.create())
+                                .region(Region.of("ddblocal"))
+                                .build()
 
                         val id = message.body()
                         val request = GetItemRequest.builder()
@@ -40,6 +46,7 @@ class DynamoDbVerticle : CoroutineVerticle {
                         )
                     } catch (e: Exception) {
 //                        message.fail(1, e.message)
+                        e.printStackTrace()
                         message.reply("Fail: ${e.message}")
                     }
                 }
