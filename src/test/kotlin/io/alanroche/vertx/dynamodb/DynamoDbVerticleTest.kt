@@ -29,6 +29,7 @@ class DynamoDbVerticleTest {
         server.start()
         System.setProperty("aws.accessKeyId", "applmgr")
         System.setProperty("aws.secretKey", "applmgr")
+        System.setProperty("aws.secretAccessKey", "applmgr")
         System.setProperty("aws.region", "us-west-2")
         System.setProperty("java.library.path", "build/libs")
 
